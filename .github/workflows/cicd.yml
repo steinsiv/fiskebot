@@ -29,12 +29,14 @@ jobs:
               run: |
                 docker build -t steinsiv/fiskebot:latest .
                 docker save steinsiv/fiskebot:latest | gzip > steinsiv_fiskebot_latest.tar.gz
-                ls -la /home/runner/.ssh
+                cat /home/runner/.ssh/config
+                cat /home/runner/.ssh/private.pem
             - name: Deploy docker compose and .env file
               run: |
                 scp docker-compose.yml "docean:$APP_PATH/docker-compose.yml"
                 scp steinsiv_fiskebot_latest.tar.gz "docean:$APP_PATH/steinsiv_fiskebot_latest.tar.gz"
-                ssh docean "cd $APP_PATH && echo 'just a test, workflow was here' >> workflow.txt"
+                ssh docean "cd $APP_PATH && docker load < steinsiv_fiskebot_latest.tar.gz && rm steinsiv_fiskebot_latest.tar.gz"
+                docker compose up -d
             - name: Cleanup SSH configs just in case
               if: always()
               run: |
