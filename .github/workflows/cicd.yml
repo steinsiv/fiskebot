@@ -22,11 +22,12 @@ jobs:
             - name: Configure SSH on github runner
               run: |
                 pwd
-                ls -la
-                mkdir "~/.ssh/"
-                echo "$SSH_KEY" > "~/.ssh/private.pem"
-                chmod 600 "~/.ssh/private.pem"
-                printf "Host docean\n  HostName $HOST\n  User $USER\n  IdentityFile ~/.ssh/private.pem\n  StrictHostKeyChecking no\n" > "$RUNNER_HOME/.ssh/config"
+                id
+                ls -la /home/runner
+                mkdir "/home/runner/.ssh/"
+                echo "$SSH_KEY" > "/home/runner/.ssh/private.pem"
+                chmod 600 "/home/runner/.ssh/private.pem"
+                printf "Host docean\n  HostName $HOST\n  User $USER\n  IdentityFile /home/runner/.ssh/private.pem\n  StrictHostKeyChecking no\n" > "/home/runner/.ssh/config"
             - name: Build docker image
               run: |
                 docker build -t steinsiv/fiskebot:latest .
