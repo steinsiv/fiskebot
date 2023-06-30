@@ -24,7 +24,6 @@ services:
       - "CTFTIME_TEAM_ID=${CTFTIME_TEAM_ID}"
       - "CTFTIME_TEAM_NAME=${CTFTIME_TEAM_NAME}"
     volumes:
-      - ./bot:/home/bot
       - ./backups:/home/bot/backups
     depends_on:
       - mongo
