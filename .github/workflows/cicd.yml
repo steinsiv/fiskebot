@@ -21,9 +21,6 @@ jobs:
             - uses: actions/checkout@v3
             - name: Configure SSH on github runner
               run: |
-                pwd
-                id
-                ls -la /home/runner
                 mkdir "/home/runner/.ssh/"
                 echo "$SSH_KEY" > "/home/runner/.ssh/private.pem"
                 chmod 600 "/home/runner/.ssh/private.pem"
@@ -33,14 +30,12 @@ jobs:
                 docker build -t steinsiv/fiskebot:latest .
                 docker save steinsiv/fiskebot:latest | gzip > steinsiv_fiskebot_latest.tar.gz
                 ls -la /home/runner/.ssh
-                cat /home/runner/.ssh/config
-                pwd
             - name: Deploy docker compose and .env file
               run: |
                 scp docker-compose.yml "docean:$APP_PATH/docker-compose.yml"
                 scp steinsiv_fiskebot_latest.tar.gz "docean:$APP_PATH/steinsiv_fiskebot_latest.tar.gz"
                 ssh docean "cd $APP_PATH && echo 'just a test, workflow was here' >> workflow.txt"
-            - name: Cleanup SSH configs
+            - name: Cleanup SSH configs just in case
               if: always()
               run: |
-                rm -rf "$RUNNER_HOME/.ssh"
+                rm -rf "/home/runner/.ssh"
