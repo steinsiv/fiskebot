@@ -32,7 +32,8 @@ jobs:
               run: |
                 docker build -t steinsiv/fiskebot:latest .
                 docker save steinsiv/fiskebot:latest | gzip > steinsiv_fiskebot_latest.tar.gz
-                ls -la
+                ls -la /home/runner/.ssh
+                cat /home/runner/.ssh/config
                 pwd
             - name: Deploy docker compose and .env file
               run: |
